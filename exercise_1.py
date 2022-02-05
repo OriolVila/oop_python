@@ -29,7 +29,6 @@ class DiscountedPaint(Paint):
         price = self.total_price()
         discount = price * discount_percentage / 100
         return price - discount
-  
    
 
 my_wall = House(10)

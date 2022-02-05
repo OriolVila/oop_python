@@ -54,8 +54,8 @@ class GraphicalPoint(Point):
 
 
 # Create rectangle object
-rectangle = GraphicalRectangle(Point(randint(0, 400), randint(0, 400)),
-              Point(randint(10, 400), randint(10, 400)))
+rectangle = GraphicalRectangle(Point(randint(0, 100), randint(0, 100)),
+              Point(randint(10, 100), randint(10, 100)))
 
 # Print rectangle coordinates
 print("Rectangle Coordinates: ",

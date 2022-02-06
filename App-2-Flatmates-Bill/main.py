@@ -1,5 +1,5 @@
 from flat import Bill, Flatmate
-from reports import PdfReport
+from reports import FileSharer, PdfReport
 
 #Build command line interface
 amount = float(input("Hey user, enter the bill amount: "))
@@ -21,6 +21,9 @@ print(f"{flatmate2.name} pays: ", flatmate2.pays(the_bill, flatmate1))
 
 pdf_report=PdfReport(filename=f"{the_bill.period}.pdf")
 pdf_report.generate(flatmate1, flatmate2, the_bill)
+
+file_sharer = FileSharer(filepath=pdf_report.filename)
+print(file_sharer.share())
 
 #the_bill = Bill(amount = 120, period = "April 2021")
 #john = Flatmate(name = "John", days_in_house = 20)

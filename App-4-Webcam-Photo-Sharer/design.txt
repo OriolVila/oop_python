@@ -1,4 +1,4 @@
-Title: Webcam Photo Sharer
+Title: Webcam Photo Searcher
 Description: An app that starts the computer webcam, lets the user capture a photo
 and uploads the photo to the web and creates a sharable link.
 Objects: Webcam:

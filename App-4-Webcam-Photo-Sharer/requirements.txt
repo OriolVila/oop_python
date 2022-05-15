@@ -3,9 +3,12 @@ chardet==3.0.4
 docutils==0.16
 filestack-python==3.2.1
 idna==2.10
-Kivy==2.0.0
+#Kivy==2.0.0
+#kivy==2.0.0
+kivy[full]
 Kivy-Garden==0.1.4
 Pygments==2.7.3
+# picamera==1.13
 requests==2.23.0
 trafaret==2.0.2
 urllib3==1.25.11

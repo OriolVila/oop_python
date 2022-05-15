@@ -1,47 +1,74 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
+from kivy.core.clipboard import Clipboard
+from filesharer import FileSharer
 
-import requests
-import wikipedia
+import time
+import webbrowser
 
-# python -m pip install kivy
+Builder.load_file("frontend.kv")
 
-# As an introduction to the Kivy library
-Builder.load_file('frontend.kv')
 
-class FirstScreen(Screen):
-    def get_image_link(self):
-        # Get user query from test input
-        query = self.manager.current_screen.ids.user_query.text
-        #Get wikipedia page and the first image link
-        page = wikipedia.page(query)
-        image_link = page.images[0]
-        print('1')
-        return image_link
+class CameraScreen(Screen):
+    def start(self):
+        """Starts camera and changes Button text"""
+        self.ids.camera.opacity = 1
+        self.ids.camera.play = True
+        self.ids.camera_button.text = "Stop Camera"
+        self.ids.camera.texture = self.ids.camera._camera.texture
 
-    def download_image(self):  
-        # Download the image
-        req = requests.get(self.get_image_link())
-        imagepath = 'files/image.jpg'
-        print('2')
-        with open(imagepath, 'wb') as file:
-            file.write(req.content)
-        # Set the image in the Image widget
-        return imagepath
-        print('3')
-    def set_image(self):
-        # Set the image in the Image widget
-            self.manager.current_screen.ids.img.source = self.download_image()
+    def stop(self):
+        """Stops camera and changes Button text"""
+        self.ids.camera.opacity = 0
+        self.ids.camera.play = False
+        self.ids.camera_button.text = "Start Camera"
+        self.ids.camera.texture = None
+
+    def capture(self):
+        """Creates a filename with the current time and captures
+        and saves a photo image under that filename"""
+        current_time = time.strftime('%Y%m%d-%H%M%S')
+        self.filepath = f"files/{current_time}.png"
+        self.ids.camera.export_to_png(self.filepath)
+        self.manager.current = 'image_screen'
+        self.manager.current_screen.ids.img.source = self.filepath
+
+
+
+class ImageScreen(Screen):
+    link_error_message = "Create link first"
+
+    def create_link(self):
+        """Accesses the photo filepath, uploads it to the web,
+        and inserts the link in the Label widget"""
+        file_path = App.get_running_app().root.ids.camera_screen.filepath
+        filesharer = FileSharer(filepath = file_path)
+        self.url = filesharer.share()
+        self.ids.link.text = self.url
+
+    def copy_link(self):
+        """Copy link to the Clipboard available for pasting"""
+        try:
+            Clipboard.copy(self.url)
+        except:
+            self.ids.link.text = self.link_error_message
+
+    def open_link(self):
+        """Open url with default browser"""
+        try:
+            webbrowser.open(self.url)
+        except:
+            self.ids.link.text = self.link_error_message
+
 
 class RootWidget(ScreenManager):
     pass
 
-class MainApp(App):
 
+class MainApp(App):
     def build(self):
         return RootWidget()
 
-MainApp().run()
 
-#req.content error. Servers are under maintenance
+MainApp().run()

@@ -12,9 +12,6 @@ class Temperature:
         self.country = country
         self.city = city
 
-    def get(self):
-        pass
-
     def _build_url(self):
         """Builds url using city and country"""
         url = self.base_url + self.country + '/' + self.city
@@ -38,5 +35,5 @@ class Temperature:
 
 
 if __name__ == "__main__":
-    temperature = Temperature(city='logrono', country='spain')
+    temperature = Temperature(city='barcelona', country='spain')
     print(temperature.get())
